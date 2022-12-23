@@ -1,0 +1,45 @@
+#chessBoard {
+    display: flex;
+    flex-wrap: wrap;
+    width: 400px;
+    height: 400px;
+    border: 10px solid brown;
+    background-color: #965b3e;
+  }
+  
+  .square {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #965b3e;
+  }
+  
+  .white {
+    background-color: #f0d9b5;
+  }
+  
+  .black {
+    background-color: #b58863;
+  }
+  
+  .piece {
+    width: 50px;
+    height: 50px;
+    border-radius: 10%;
+    background-color: 965b3e;
+  }
+
+  .row {
+    display: flex;
+  }
+  
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    background-color: 2px solid #965b3e;
+}
+  
+
+  
