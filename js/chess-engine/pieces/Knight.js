@@ -15,7 +15,8 @@ class Knight extends Piece {
   // (+2,+1), (+2,-1), (-2,+1), (-2,-1), (-1,+2), (-1,-2), (+1,-2), (+1,+2)
   getValidMoves(board) {
     let moves = [];
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    // console.log(this.position);
+    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]+1 && this.position[1]+1<=7){
       if (board.board[this.position[0]+2][this.position[1]+1] == "e") {
         moves.push([this.position[0]+2, this.position[1]+1]);
       }
@@ -26,38 +27,38 @@ class Knight extends Piece {
         moves.push([this.position[0]+2, this.position[1]-1]);
       }
     }
-
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    
+    if (0<=this.position[0]-2 && this.position[0]-2<=7 && 0<=this.position[1]+1 && this.position[1]+1<=7){
       if (board.board[this.position[0]-2][this.position[1]+1] == "e") {
         moves.push([this.position[0]-2, this.position[1]+1]);
       }
     }
     
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    if (0<=this.position[0]-2 && this.position[0]-2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
       if (board.board[this.position[0]-2][this.position[1]-1] == "e") {
         moves.push([this.position[0]-2, this.position[1]-1]);
       }
     }
     
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    if (0<=this.position[0]-1 && this.position[0]-1<=7 && 0<=this.position[1]+2 && this.position[1]+2<=7){
       if (board.board[this.position[0]-1][this.position[1]+2] == "e") {
         moves.push([this.position[0]-1, this.position[1]+2]);
       }
     }
     
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    if (0<=this.position[0]-1 && this.position[0]-1<=7 && 0<=this.position[1]-2 && this.position[1]-2<=7){
       if (board.board[this.position[0]-1][this.position[1]-2] == "e") {
         moves.push([this.position[0]-1, this.position[1]-2]);
       }
     }
     
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    if (0<=this.position[0]+1 && this.position[0]+1<=7 && 0<=this.position[1]-2 && this.position[1]-2<=7){
       if (board.board[this.position[0]+1][this.position[1]-2] == "e") {
         moves.push([this.position[0]+1, this.position[1]-2]);
       }
     }
     
-    if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]-1 && this.position[1]-1<=7){
+    if (0<=this.position[0]+1 && this.position[0]+1<=7 && 0<=this.position[1]+2 && this.position[1]+2<=7){
       if (board.board[this.position[0]+1][this.position[1]+2] == "e") {
         moves.push([this.position[0]+1, this.position[1]+2]);
       }

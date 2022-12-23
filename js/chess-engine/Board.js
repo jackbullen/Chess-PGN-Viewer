@@ -67,13 +67,13 @@ class Board {
     }
 
     // Add black pieces
-    this.blackPieces.push(new Rook('black', [7, 0]));
-    this.blackPieces.push(new Knight('black', [7, 1]));    
+    this.blackPieces.push(new Rook('black', [7, 0])); 
+    this.blackPieces.push(new Knight('black', [7, 6]));   
     this.blackPieces.push(new Bishop('black', [7, 5]));
     this.blackPieces.push(new King('black', [7, 3]));
     this.blackPieces.push(new Queen('black', [7, 4]));
     this.blackPieces.push(new Bishop('black', [7, 2]));
-    this.blackPieces.push(new Knight('black', [7, 6]));
+    this.blackPieces.push(new Knight('black', [7, 1]));
     this.blackPieces.push(new Rook('black', [7, 7]));
 
 
@@ -96,11 +96,34 @@ class Board {
     this.board[x][y] = piece;
     }
   }
+  castle(king, rook, short) {
 
+    this.movenum+=1/2;
+
+    // Check castle is possible?
+
+    // Perform the castling
+    this.board[king.position[0]][king.position[1]] = "e";
+    this.board[rook.position[0]][rook.position[1]] = "e";
+    if (short) {
+      this.board[king.position[0]][king.position[1]-1] = rook;
+      this.board[rook.position[0]][rook.position[1]+1] = king;
+      const tmp = [rook.position[0], rook.position[1]];
+      rook.position = [king.position[0], king.position[1]-1];
+      king.position = [tmp[0], tmp[1]+1];
+    }
+    else {
+      this.board[king.position[0]][king.position[1]+1] = rook;
+      this.board[rook.position[0]][rook.position[1]-2] = king;
+      const tmp = [rook.position[0], rook.position[1]];
+      rook.position = [king.position[0], king.position[1]+1];
+      king.position = [tmp[0], tmp[1]-2];
+    }
+  }
   move(src, dest, piece) {
 
     this.movenum+=1/2;
-    // console.log(src,dest, piece);
+
     const srcX = piece.position[0];
     const srcY = piece.position[1];
 

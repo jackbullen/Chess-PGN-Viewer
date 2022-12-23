@@ -5,14 +5,52 @@ const chessBoardDiv = document.getElementById('board');
 const chessBoard = [];
 
 const applyMoves = (board, submovesList, movesList) => {
-    
-    let pieceW = board.whitePieces[submovesList[0][4]];
-    let pieceB = board.blackPieces[submovesList[1][4]];
-    let srcSqrW = pieceW.position;
-    let srcSqrB = pieceB.position;
-    board.move(srcSqrW, submovesList[0].slice(0,2), pieceW);
-    board.move(srcSqrB, submovesList[1].slice(0,2), pieceB);
-    movesList.push([submovesList[0],submovesList[1],submovesList[2]]);
+    // console.log(submovesList);
+
+    // White castles
+    if (submovesList[0][3] == "King and Rook") {
+        let king = board.whitePieces[3];
+        // Short
+        console.log(submovesList[0],submovesList[1]);
+        if (submovesList[0][2] == "O-O"){
+            let rook = board.whitePieces[0];
+            board.castle(king, rook, true);
+        }
+        // Long
+        else {
+            let rook = board.whitePieces[7];
+            board.castle(king, rook, false);
+        }
+    }
+    // Non-castle white move
+    else {
+        let pieceW = board.whitePieces[submovesList[0][4]];
+        let srcSqrW = pieceW.position;
+        board.move(srcSqrW, submovesList[0].slice(0,2), pieceW);
+    }
+
+    // Black castles
+    if (submovesList[1][3] == "King and Rook") {
+        let king = board.blackPieces[3];
+        // Short
+        if (submovesList[0][2] == "O-O"){
+            let rook = board.blackPieces[0];
+            board.castle(king, rook, true);
+        }
+        // Long
+        else {
+            let rook = board.blackPieces[7];
+            board.castle(king, rook, false);
+        }
+    }
+    // Non-castle black move
+    else {
+        let pieceB = board.blackPieces[submovesList[1][4]];
+        let srcSqrB = pieceB.position;
+        board.move(srcSqrB, submovesList[1].slice(0,2), pieceB);
+    }
+
+    movesList.push([submovesList[0],submovesList[1]]);
     submovesList.length=0;
     renderBoard(board);
 }
@@ -99,7 +137,7 @@ const renderBoard = (board) => {
   const parsePGN = (pgn, board) => {
     // Split the PGN string into an array of moves
     const moves = pgn.split(/\s+/);
-  
+    console.log(moves);
     // Create an array to store the moves as (row, col) pairs
     const movesList = [];
     const submovesList = [];
@@ -120,7 +158,7 @@ const renderBoard = (board) => {
     // find the destination (Row,Col) for the move and
     // handle the various cases for PGN notation
     for (let move of moves) {
-
+        // console.log(move);
         // Handle moves with a result,
         // (e.g. "1-0", "0-1", "1/2-1/2", "1.", "2.")
         if (move == "1-0" || move == "0-1" || move == "1/2-1/2") {
@@ -148,7 +186,7 @@ const renderBoard = (board) => {
         // When the move is a move number, use this as a chance to 
         // update previous white and black moves on the parseBoard.
         if (move == "1.") continue;
-        if ((move.includes(0) && move.includes(1)) ||  (move.includes(2) && move.includes(1))) continue;
+        // if ((move.includes(0) && move.includes(1)) ||  (move.includes(2) && move.includes(1))) continue;
         if (move.includes('.')) {
 
             // console.log(submovesList[0],submovesList[1]);
@@ -185,13 +223,13 @@ const renderBoard = (board) => {
     
         // Short castle
         if (move == "O-O") {
-            peace = "King";
+            peace = "King and Rook";
             dest_row = 0;
             dest_col = 0;
         }
         // Long castle
         if (move == "O-O-O") {
-            peace = "King";
+            peace = "King and Rook";
             dest_row = 0;
             dest_col = 0;
         }
@@ -281,6 +319,8 @@ const renderBoard = (board) => {
     if (piece == "Bishop") {
         let lBMoves = board.whitePieces[2].getValidMoves(board);
         let dBMoves = board.whitePieces[5].getValidMoves(board);
+        console.log(lBMoves);
+        console.log(dBMoves);
         if (!turn) {
             lBMoves = board.blackPieces[2].getValidMoves(board);
             dBMoves = board.blackPieces[5].getValidMoves(board);
@@ -293,14 +333,15 @@ const renderBoard = (board) => {
         }
     }
     // Knight move
-    // Still need to handle which bishop is moving.
-    // Write a getValidMoves() method in Bishop class.
     if (piece == "Knight") {
-        let lKMoves = board.whitePieces[0].getValidMoves(board);
-        let rKMoves = board.whitePieces[7].getValidMoves(board);
+        let lKMoves = board.whitePieces[1].getValidMoves(board);
+        let rKMoves = board.whitePieces[6].getValidMoves(board);
+        // console.log(board.movenum);
+        // console.log(lKMoves);
+        // console.log(rKMoves);
         if (!turn) {
-            lKMoves = board.blackPieces[0].getValidMoves(board);
-            rKMoves = board.blackPieces[7].getValidMoves(board);
+            lKMoves = board.blackPieces[1].getValidMoves(board);
+            rKMoves = board.blackPieces[6].getValidMoves(board);
         }
         if (lKMoves.some(el => arrayEquals(el, [dest_row,dest_col]))) {
             return 1;
@@ -308,15 +349,13 @@ const renderBoard = (board) => {
         else {
             return 6;
         }
-        if (true) return 1;
-        else return 6;
     }
     // Rook move
-    // Still need to handle which bishop is moving.
-    // Write a getValidMoves() method in Bishop class.
     if (piece == "Rook") {
         let lRMoves = board.whitePieces[0].getValidMoves(board);
         let rRMoves = board.whitePieces[7].getValidMoves(board);
+        console.log("Left Rook Moves: ", lRMoves);
+        console.log("Right rook moves:", rRMoves);
         if (!turn) {
             lRMoves = board.blackPieces[0].getValidMoves(board);
             rRMoves = board.blackPieces[7].getValidMoves(board);
@@ -353,7 +392,7 @@ const parseBoard = new Board();
 renderBoard(parseBoard);
 const pgn = '1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 { B01 Scandinavian Defense: Classical Variation } 6. Bc4 e6 7. O-O c6 8. Re1 Nbd7 9. d5 cxd5 10. Nxd5 Nxd5 11. Bxd5 Rd8 12. Bg5 Nf6 13. Qe2 Rxd5 14. c4 Rd7 15. Qe5 Qxe5 16. Rxe5 Bd6 17. Re2 Ne4 18. Be3 O-O 19. Rc1 Bc5 20. Bxc5 Nxc5 21. Ne5 Rd4 22. b3 Rfd8 23. f3 Nd3 24. Nxd3 Bxd3 25. Rd2 b5 26. c5 Kf8 27. Kf2 Ke7 28. Ke3 e5 29. Rcd1 Bf5 30. Rxd4 exd4+ 31. Rxd4 Rxd4 32. Kxd4 Kd7 33. b4 Kc6 34. g4 Be6 35. h3 Bxa2 36. f4 Bb1 37. f5 Bc2 38. h4 Bb3 39. g5 f6 40. g6 hxg6 41. fxg6 Bd5 42. Ke3 a5 43. bxa5 Kxc5 44. h5 b4 45. h6 gxh6 46. a6 b3 47. a7 Kb4 48. g7 b2 49. a8=Q Bxa8 50. g8=Q Kc3 51. Qc8+ Kb3 0-1';
 const moves = parsePGN(pgn, parseBoard);
-// console.log(moves);
+console.log(moves);
 renderBoard(parseBoard);
 // const playBoard = new Board();
 

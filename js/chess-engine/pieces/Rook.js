@@ -14,6 +14,7 @@ class Rook extends Piece {
   // Return an array of valid positions that the Rook can move to
   getValidMoves(board) {
     let moves = []
+    if (this.color == "white") {
     // up
     for (let i = 1; i<7; i++){
       if (0<=this.position[0]+i && this.position[0]+i<=7 && 0<=this.position[1] && this.position[1]<=7){
@@ -56,6 +57,7 @@ class Rook extends Piece {
     }
     return moves;
   }
+}
 
   isAttacking(piece) {
     // Return true if the queen is attacking the specified piece, false otherwise
