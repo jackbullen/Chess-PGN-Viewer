@@ -63,6 +63,7 @@ class Knight extends Piece {
         moves.push([this.position[0]+1, this.position[1]+2]);
       }
     }
+    // console.log(this.color,moves)
     return moves;
   }
   

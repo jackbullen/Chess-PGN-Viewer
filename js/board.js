@@ -6,12 +6,12 @@ const chessBoard = [];
 
 const applyMoves = (board, submovesList, movesList) => {
     // console.log(submovesList);
-
+    console.log(submovesList[0], submovesList[1]);
     // White castles
     if (submovesList[0][3] == "King and Rook") {
         let king = board.whitePieces[3];
         // Short
-        console.log(submovesList[0],submovesList[1]);
+        // console.log(submovesList[0],submovesList[1]);
         if (submovesList[0][2] == "O-O"){
             let rook = board.whitePieces[0];
             board.castle(king, rook, true);
@@ -33,8 +33,10 @@ const applyMoves = (board, submovesList, movesList) => {
     if (submovesList[1][3] == "King and Rook") {
         let king = board.blackPieces[3];
         // Short
-        if (submovesList[0][2] == "O-O"){
+        
+        if (submovesList[1][2] == "O-O"){
             let rook = board.blackPieces[0];
+            // console.log(king.position,rook.position);
             board.castle(king, rook, true);
         }
         // Long
@@ -45,11 +47,12 @@ const applyMoves = (board, submovesList, movesList) => {
     }
     // Non-castle black move
     else {
+        console.log(board.blackPieces);
         let pieceB = board.blackPieces[submovesList[1][4]];
         let srcSqrB = pieceB.position;
         board.move(srcSqrB, submovesList[1].slice(0,2), pieceB);
     }
-
+    // console.log(submovesList[0], submovesList[1]);
     movesList.push([submovesList[0],submovesList[1]]);
     submovesList.length=0;
     renderBoard(board);
@@ -90,7 +93,7 @@ const renderBoard = (board) => {
         // Append the img element to the square
         piece.appendChild(pieceImg);
         square.appendChild(piece);
-        square.appendChild(sqrLoc);
+        // square.appendChild(sqrLoc);
         row.appendChild(square);
         chessBoard.push(square);
       }
@@ -137,7 +140,7 @@ const renderBoard = (board) => {
   const parsePGN = (pgn, board) => {
     // Split the PGN string into an array of moves
     const moves = pgn.split(/\s+/);
-    console.log(moves);
+    // console.log(moves);
     // Create an array to store the moves as (row, col) pairs
     const movesList = [];
     const submovesList = [];
@@ -159,9 +162,11 @@ const renderBoard = (board) => {
     // handle the various cases for PGN notation
     for (let move of moves) {
         // console.log(move);
+        // console.log(move);
         // Handle moves with a result,
         // (e.g. "1-0", "0-1", "1/2-1/2", "1.", "2.")
         if (move == "1-0" || move == "0-1" || move == "1/2-1/2") {
+            
             // let pieceW = board.whitePieces[getSrcSqrIndex(board, submovesList[0][0], submovesList[0][1], submovesList[0][3])];
             // let pieceB = board.blackPieces[getSrcSqrIndex(board, submovesList[1][0], submovesList[1][1], submovesList[1][3])];
             // let srcSqrW = pieceW.position;
@@ -272,10 +277,28 @@ const renderBoard = (board) => {
             dest_col = 8-(move.substring(2).charCodeAt(0) - 96);
         }
 
-        // Ambiguous piece captures
-        if ((move.length == 4 && !check) || move.length == 5) {
+        // Ambiguous piece move
+        if ((move[0] == "N" || move[0] == "R" || move[0] == "B") && (move.length==4) && move[1]!="x") {
+            if (move[0] == "N") {
+                peace = "Knight_"+move[2];
+            }
+            if (move[0] == "R") {
+                peace = "Rook_"+move[2];
+            }
+            if (move[0] == "B") {
+                peace = "Bishop_"+move[2];
+            }
             dest_row = parseInt(move.substring(2)[1])-1;
             dest_col = 8-(move.substring(2).charCodeAt(0) - 96);
+            console.log("destrow:",dest_row,"dest_col:",dest_col);
+        }
+
+        // Ambiguous piece capture
+        if ((move[0] == "N" || move[0] == "R" || move[0] == "B") && (move.length==5)) {
+            console.log("Need to handle AMBIGUOUS PIECE CAPTURE!!")
+            dest_row = parseInt(move.substring(2)[1])-1;
+            dest_col = 8-(move.substring(2).charCodeAt(0) - 96);
+            console.log("destrow:",dest_row,"dest_col:",dest_col);
         }
 
         // Promotions
@@ -289,7 +312,7 @@ const renderBoard = (board) => {
         // add the move to the list
         // console.log(move+check, turn, getSrcPieceIndex(board, dest_row, dest_col, peace, turn));
         // console.log(board.whitePieces[2].position);
-
+        
         submovesList.push([dest_row,dest_col,move+check,peace,getSrcPieceIndex(board, dest_row, dest_col, peace, turn)]);
         turn = !turn;
     }
@@ -319,8 +342,8 @@ const renderBoard = (board) => {
     if (piece == "Bishop") {
         let lBMoves = board.whitePieces[2].getValidMoves(board);
         let dBMoves = board.whitePieces[5].getValidMoves(board);
-        console.log(lBMoves);
-        console.log(dBMoves);
+        // console.log(lBMoves);
+        // console.log(dBMoves);
         if (!turn) {
             lBMoves = board.blackPieces[2].getValidMoves(board);
             dBMoves = board.blackPieces[5].getValidMoves(board);
@@ -352,10 +375,11 @@ const renderBoard = (board) => {
     }
     // Rook move
     if (piece == "Rook") {
+        // console.log(turn);
         let lRMoves = board.whitePieces[0].getValidMoves(board);
         let rRMoves = board.whitePieces[7].getValidMoves(board);
-        console.log("Left Rook Moves: ", lRMoves);
-        console.log("Right rook moves:", rRMoves);
+        // console.log("Left Rook Moves: ", lRMoves);
+        // console.log("Right rook moves:", rRMoves);
         if (!turn) {
             lRMoves = board.blackPieces[0].getValidMoves(board);
             rRMoves = board.blackPieces[7].getValidMoves(board);
@@ -371,6 +395,32 @@ const renderBoard = (board) => {
     if (piece == "Queen"){
         return 4;
     }
+
+    if (piece.slice(0,-1) == "Knight_"){
+        console.log(piece.charAt(piece.length-1));
+        
+        let k1 = board.whitePieces[1];
+        let k2 = board.whitePieces[6]; 
+
+        if (!turn) {
+            let k1 = board.blackPieces[1];
+            let k2 = board.blackPieces[6]; 
+        }
+        if (k1.position[1] == letToNum(piece.charCodeAt(piece.length-1)-97)) {
+            return 1;
+        }
+        else {
+            return 6;
+        }
+         
+    } 
+    if (piece.slice(0,-1) == "Bishop_") {
+
+    }  
+    if (piece.slice(0,-1) == "Rook_") {
+        // console.log(piece.charAt(piece.length-1));
+        // console.log(8-(piece.substring(2).charCodeAt(0) - 96));
+    }
                                                               
   }
   
@@ -385,7 +435,9 @@ const renderBoard = (board) => {
     });
   };
 
-  
+ const letToNum = (str) => {
+
+ } 
 
 
 const parseBoard = new Board();

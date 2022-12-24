@@ -68,12 +68,12 @@ class Board {
 
     // Add black pieces
     this.blackPieces.push(new Rook('black', [7, 0])); 
-    this.blackPieces.push(new Knight('black', [7, 6]));   
+    this.blackPieces.push(new Knight('black', [7, 1]));
     this.blackPieces.push(new Bishop('black', [7, 5]));
     this.blackPieces.push(new King('black', [7, 3]));
     this.blackPieces.push(new Queen('black', [7, 4]));
     this.blackPieces.push(new Bishop('black', [7, 2]));
-    this.blackPieces.push(new Knight('black', [7, 1]));
+    this.blackPieces.push(new Knight('black', [7, 6]));   
     this.blackPieces.push(new Rook('black', [7, 7]));
 
 
