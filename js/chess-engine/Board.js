@@ -144,53 +144,52 @@ class Board {
 
   forwardMove(move) {
 
-    if (this.movenum == Math.floor(this.movenum)) {
-      // White castles
-      if (move[3] == "King and Rook") {
-          let king = this.whitePieces[3];
-          // Short
-          // console.log(submovesList[0],submovesList[1]);
-          if (move[2] == "O-O"){
-              let rook = this.whitePieces[0];
-              this.castle(king, rook, true);
-          }
-          // Long
-          else {
-              let rook = this.whitePieces[7];
-              this.castle(king, rook, false);
-          }
-      }
-      // Non-castle white move
-      else {
-          let pieceW = this.whitePieces[move[4]];
-          let srcSqrW = pieceW.position;
-          this.move(srcSqrW, move.slice(0,2), pieceW);
-      }
-  }
-  else{
-      // Black castles
-      if (move[3] == "King and Rook") {
-          let king = this.blackPieces[3];
-          // Short
-          
-          if (move[2] == "O-O"){
-              let rook = this.blackPieces[0];
-              // console.log(king.position,rook.position);
-              this.castle(king, rook, true);
-          }
-          // Long
-          else {
-              let rook = this.blackPieces[7];
-              this.castle(king, rook, false);
-          }
-      }
-      // Non-castle black move
-      else {
-          const pieceB = this.blackPieces[move[4]];
-          const srcSqrB = pieceB.position;
-          this.move(srcSqrB, move.slice(0,2), pieceB);
-      }
-  }
+      if (this.movenum == Math.floor(this.movenum)) {
+        // White castles
+        if (move[3] == "King and Rook") {
+            let king = this.whitePieces[3];
+            // Short
+            if (move[2] == "O-O"){
+                let rook = this.whitePieces[0];
+                this.castle(king, rook, true);
+            }
+            // Long
+            else {
+                let rook = this.whitePieces[7];
+                this.castle(king, rook, false);
+            }
+        }
+        // Non-castle white move
+        else {
+            let pieceW = this.whitePieces[move[4]];
+            let srcSqrW = pieceW.position;
+            this.move(srcSqrW, move.slice(0,2), pieceW);
+        }
+    }
+    else{
+        // Black castles
+        if (move[3] == "King and Rook") {
+            let king = this.blackPieces[3];
+            // Short
+            
+            if (move[2] == "O-O"){
+                let rook = this.blackPieces[0];
+                // console.log(king.position,rook.position);
+                this.castle(king, rook, true);
+            }
+            // Long
+            else {
+                let rook = this.blackPieces[7];
+                this.castle(king, rook, false);
+            }
+        }
+        // Non-castle black move
+        else {
+            const pieceB = this.blackPieces[move[4]];
+            const srcSqrB = pieceB.position;
+            this.move(srcSqrB, move.slice(0,2), pieceB);
+        }
+    }
   }
   // Check if a square is occupied by a piece, return true if so.
   occupied(sqr){
@@ -198,95 +197,5 @@ class Board {
     else return true;
   }
 
-  // Return true if the specified color is in checkmate, false otherwise
-  checkmate(color) {
-    let inCheck = this.inCheck(color);
-    if (!inCheck) {
-        return false;
-    }
-
-    let pieces = (color == 'white') ? this.whitePieces : this.blackPieces;
-    for (let i = 0; i < pieces.length; i++) {
-        let piece = pieces[i];
-        let validMoves = piece.validMoves();
-        for (let j = 0; j < validMoves.length; j++) {
-        let start = piece.position;
-        let end = validMoves[j];
-        let capturedPiece = this.board[end[0]][end[1]];
-        this.board[end[0]][end[1]] = piece;
-        this.board[start[0]][start[1]] = null;
-        piece.position = end;
-        if (!this.inCheck(color)) {
-            this.board[start[0]][start[1]] = piece;
-            this.board[end[0]][end[1]] = capturedPiece;
-            piece.position = start;
-            return false;
-        }
-        this.board[start[0]][start[1]] = piece;
-        this.board[end[0]][end[1]] = capturedPiece;
-        piece.position = start;
-        }
-    return true;
-      }
-  }
-
-  // Return true if the specified color is in stalemate, false otherwise
-  stalemate(color) {
-    if (this.inCheck(color)) {
-        return false;
-      }
-    
-      let pieces = (color == 'white') ? this.whitePieces : this.blackPieces;
-      for (let i = 0; i < pieces.length; i++) {
-        let piece = pieces[i];
-        let validMoves = piece.validMoves();
-        for (let j = 0; j < validMoves.length; j++) {
-          let start = piece.position;
-          let end = validMoves[j];
-          let capturedPiece = this.board[end[0]][end[1]];
-          this.board[end[0]][end[1]] = piece;
-          this.board[start[0]][start[1]] = null;
-          piece.position = end;
-          if (!this.inCheck(color)) {
-            this.board[start[0]][start[1]] = piece;
-            this.board[end[0]][end[1]] = capturedPiece;
-            piece.position = start;
-            return false;
-          }
-          this.board[start[0]][start[1]] = piece;
-          this.board[end[0]][end[1]] = capturedPiece;
-          piece.position = start;
-        }
-      }
-      return true;
-  }
-
-  // // Update board function. 
-  // // Only used after another board has parsed the PGN.
-  // update(W, B, undo=false) {
-  //   // let pieceW = this.whitePieces[W[4]];
-  //   // let pieceB = this.blackPieces[B[4]];
-
-  //   // Backward move
-  //   if (undo) {
-  //     if (this.movenum == 0) {
-  //       return;
-  //     }
-
-  //     // Make reverse move here with this.undo= [W,B] of previous move.
-      
-  //   } 
-  //   // Forward move
-  //   else {
-  //     if 
-  //     this.board[W[0]][W[1]] = this.whitePieces[W[4]];
-
-  //     this.undo = [W,B];
-  //   }
-
-
-  // }
 }
-
-
 export { Board };

@@ -137,9 +137,6 @@ class Rook extends Piece {
   }
 }
 
-  isAttacking(piece) {
-    // Return true if the queen is attacking the specified piece, false otherwise
-  }
 }
 
 export { Rook };

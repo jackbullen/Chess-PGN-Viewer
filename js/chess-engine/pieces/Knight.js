@@ -15,7 +15,10 @@ class Knight extends Piece {
   // (+2,+1), (+2,-1), (-2,+1), (-2,-1), (-1,+2), (-1,-2), (+1,-2), (+1,+2)
   getValidMoves(board) {
     let moves = [];
-    // console.log(this.position);
+    
+    if (this.captured == true) {
+      return [];
+    }
     if(this.color == "black"){
       if (0<=this.position[0]+2 && this.position[0]+2<=7 && 0<=this.position[1]+1 && this.position[1]+1<=7){
         if (board.whitePieces.includes(board.board[this.position[0]+2][this.position[1]+1])){
@@ -179,14 +182,10 @@ class Knight extends Piece {
     }
 
   }
-
+    console.log(this.color, moves);
     return moves;
   }
   
-
-  isAttacking(piece) {
-    // Return true if the knight is attacking the specified piece, false otherwise
-  }
 }
 
 export { Knight };

@@ -6,12 +6,12 @@ const chessBoardDiv = document.getElementById('board');
 const chessBoard = [];
 
 const applyMoves = (board, submovesList, movesList) => {
-
+    
+    
     // White castles
     if (submovesList[0][3] == "King and Rook") {
         let king = board.whitePieces[3];
         // Short
-        // console.log(submovesList[0],submovesList[1]);
         if (submovesList[0][2] == "O-O"){
             let rook = board.whitePieces[0];
             board.castle(king, rook, true);
@@ -24,10 +24,14 @@ const applyMoves = (board, submovesList, movesList) => {
     }
     // Non-castle white move
     else {
-
-        let pieceW = board.whitePieces[submovesList[0][4]];
+        const pieceIndex = getSrcPieceIndex(board, submovesList[0][0], submovesList[0][1], submovesList[0][3], true); 
+        let pieceW = board.whitePieces[pieceIndex];
         let srcSqrW = pieceW.position;
+        if (submovesList[0][2][1] == "x") {
+            board.board[submovesList[0][0]][submovesList[0][1]].captured = true;
+        }
         board.move(srcSqrW, submovesList[0].slice(0,2), pieceW);
+        submovesList[0].push(pieceIndex);
     }
 
     // Black castles
@@ -47,9 +51,14 @@ const applyMoves = (board, submovesList, movesList) => {
     }
     // Non-castle black move
     else {
-        let pieceB = board.blackPieces[submovesList[1][4]];
+        const pieceIndex = getSrcPieceIndex(board, submovesList[1][0], submovesList[1][1], submovesList[1][3], false); 
+        let pieceB = board.blackPieces[pieceIndex];
         let srcSqrB = pieceB.position;
+        if (submovesList[1][2][1] == "x") {
+            board.board[submovesList[1][0]][submovesList[1][1]].captured = true;
+        }
         board.move(srcSqrB, submovesList[1].slice(0,2), pieceB);
+        submovesList[1].push(pieceIndex);
     }
     movesList.push([submovesList[0],submovesList[1]]);
     submovesList.length=0;
@@ -89,17 +98,17 @@ const renderBoard = (board) => {
         // Append the img element to the square
         piece.appendChild(pieceImg);
         square.appendChild(piece);
-        // square.appendChild(sqrLoc);
+        square.appendChild(sqrLoc);
         row.appendChild(square);
         chessBoard.push(square);
       }
       chessBoardDiv.appendChild(row);
       
     }
-    // const space = document.createElement('p')
-    // const boardtxt = document.createTextNode(`${board.movenum}`);
-    // space.appendChild(boardtxt);
-    // chessBoardDiv.appendChild(space);
+    const space = document.createElement('p')
+    const boardtxt = document.createTextNode(`${board.movenum}`);
+    space.appendChild(boardtxt);
+    chessBoardDiv.appendChild(space);
   };
   
 
@@ -189,21 +198,10 @@ const renderBoard = (board) => {
     // find the destination (Row,Col) for the move and
     // handle the various cases for PGN notation
     for (let move of moves) {
-        // console.log(move);
-        // console.log(move);
+
         // Handle moves with a result,
         // (e.g. "1-0", "0-1", "1/2-1/2", "1.", "2.")
         if (move == "1-0" || move == "0-1" || move == "1/2-1/2") {
-            
-            // let pieceW = board.whitePieces[getSrcSqrIndex(board, submovesList[0][0], submovesList[0][1], submovesList[0][3])];
-            // let pieceB = board.blackPieces[getSrcSqrIndex(board, submovesList[1][0], submovesList[1][1], submovesList[1][3])];
-            // let srcSqrW = pieceW.position;
-            // let srcSqrB = pieceB.position;
-            // board.move(srcSqrW, submovesList[0].slice(0,2), pieceW);
-            // board.move(srcSqrB, submovesList[1].slice(0,2), pieceB);
-            // movesList.push([submovesList[0],submovesList[1],submovesList[2]]);
-            // submovesList.length=0;
-            applyMoves(board,submovesList,movesList);
             movesList.push(move);
             break;
         }
@@ -219,21 +217,10 @@ const renderBoard = (board) => {
         // When the move is a move number, use this as a chance to 
         // update previous white and black moves on the parseBoard.
         if (move == "1.") continue;
-        // if ((move.includes(0) && move.includes(1)) ||  (move.includes(2) && move.includes(1))) continue;
         if (move.includes('.')) {
 
-            // console.log(submovesList[0],submovesList[1]);
-
-            // let pieceW = board.whitePieces[getSrcSqrIndex(board, submovesList[0][0], submovesList[0][1], submovesList[0][3])];
-            // let pieceB = board.blackPieces[getSrcSqrIndex(board, submovesList[1][0], submovesList[1][1], submovesList[1][3])];
-            // // console.log(getSrcSqrIndex(board, submovesList[0][0], submovesList[0][1], submovesList[0][3]));
-            // let srcSqrW = pieceW.position;
-            // let srcSqrB = pieceB.position;
-            // board.move(srcSqrW, submovesList[0].slice(0,2), pieceW);
-            // board.move(srcSqrB, submovesList[1].slice(0,2), pieceB);
-            // movesList.push([submovesList[0],submovesList[1],submovesList[2]]);
-            // submovesList.length=0;
             applyMoves(board,submovesList,movesList);
+            // renderBoard(board);
             continue;
         }
 
@@ -334,17 +321,10 @@ const renderBoard = (board) => {
             dest_row = parseInt(move[1])-1;
             dest_col = 8-(move.charCodeAt(0) - 96);
         }
-
-        // console.log(dest_row, dest_col, move, peace);
-
-        // add the move to the list
-        // console.log(move+check, turn, getSrcPieceIndex(board, dest_row, dest_col, peace, turn));
-        // console.log(board.whitePieces[2].position);
         
-        submovesList.push([dest_row,dest_col,move+check,peace,getSrcPieceIndex(board, dest_row, dest_col, peace, turn)]);
+        submovesList.push([dest_row,dest_col,move+check,peace]);
         turn = !turn;
     }
-    // console.log(movesList);
     return movesList;
   }
   const arrayEquals = (a, b) => {
@@ -370,8 +350,6 @@ const renderBoard = (board) => {
     if (piece == "Bishop") {
         let lBMoves = board.whitePieces[2].getValidMoves(board);
         let dBMoves = board.whitePieces[5].getValidMoves(board);
-        // console.log(lBMoves);
-        // console.log(dBMoves);
         if (!turn) {
             lBMoves = board.blackPieces[2].getValidMoves(board);
             dBMoves = board.blackPieces[5].getValidMoves(board);
@@ -387,14 +365,11 @@ const renderBoard = (board) => {
     if (piece == "Knight") {
         let lKMoves = board.whitePieces[1].getValidMoves(board);
         let rKMoves = board.whitePieces[6].getValidMoves(board);
-        console.log(board.movenum);
-        console.log(lKMoves);
-        console.log(rKMoves);
         if (!turn) {
             lKMoves = board.blackPieces[1].getValidMoves(board);
             rKMoves = board.blackPieces[6].getValidMoves(board);
         }
-        if (lKMoves.some(el => arrayEquals(el, [dest_row,dest_col]))) {
+        if (lKMoves.some(el => arrayEquals(el, [dest_row,dest_col])) && board.whitePieces[1].captured == false) {
             return 1;
         }
         else {
@@ -403,11 +378,8 @@ const renderBoard = (board) => {
     }
     // Rook move
     if (piece == "Rook") {
-        // console.log(turn);
         let lRMoves = board.whitePieces[0].getValidMoves(board);
         let rRMoves = board.whitePieces[7].getValidMoves(board);
-        // console.log("Left Rook Moves: ", lRMoves);
-        // console.log("Right rook moves:", rRMoves);
         if (!turn) {
             lRMoves = board.blackPieces[0].getValidMoves(board);
             rRMoves = board.blackPieces[7].getValidMoves(board);
@@ -489,11 +461,18 @@ const renderBoard = (board) => {
     forwardButton.addEventListener('click', () => {
       // Check if there are more moves to play
       if (currentMove < moves.length) {
+        console.log(game[currentMove]);
+        if (game[currentMove] == "1-0" || game[currentMove] == "0-1" ||game[currentMove] == "1/2-1/2" ){
+            // showendBoard(board);
+            console.log("end of game");
+            return;
+        }
         // Update the board with the next move
         board.forwardMove(moves[currentMove]);
         
         // Update the board display with the updated board
         updateBoard(board);
+        
         // Increment the current move counter
         currentMove++;
       }
@@ -521,7 +500,7 @@ const renderBoard = (board) => {
 
 // Initialize the moves array using a parsing board and parsePGN().
 const parseBoard = new Board();
-const pgn = '1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 { B01 Scandinavian Defense: Classical Variation } 6. Bc4 e6 7. O-O c6 8. Re1 Nbd7 9. d5 cxd5 10. Nxd5 Nxd5 11. Bxd5 Rd8 12. Bg5 Nf6 13. Qe2 Rxd5 14. c4 Rd7 15. Qe5 Qxe5 16. Rxe5 Bd6 17. Re2 Ne4 18. Be3 O-O 19. Rc1 Bc5 20. Bxc5 Nxc5 21. Ne5 Rd4 22. b3 Rfd8 23. f3 Nd3 24. Nxd3 Bxd3 25. Rd2 b5 26. c5 Kf8 27. Kf2 Ke7 28. Ke3 e5 29. Rcd1 Bc5 30. Rxd4 exd4+ 31. Rxd4 Rxd4 32. Kxd4 Kd7 33. b4 Kc6 34. g4 Be6 35. h3 Bxa2 36. f4 Bb1 37. f5 Bc2 38. h4 Bb3 39. g5 f6 40. g6 hxg6 41. fxg6 Bd5 42. Ke3 a5 43. bxa5 Kxc5 44. h5 b4 45. h6 gxh6 46. a6 b3 47. a7 Kb4 48. g7 b2 49. a8=Q Bxa8 50. g8=Q Kc3 51. Qc8+ Kb3 0-1';
+const pgn = '1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 { B01 Scandinavian Defense: Classical Variation } 6. Bc4 e6 7. O-O c6 8. Re1 Nbd7 9. d5 cxd5 10. Nxd5 Nxd5 11. Bxd5 Rd8 12. Bg5 Nf6 13. Qe2 Rxd5 14. c4 Rd7 15. Qe5 Qxe5 16. Rxe5 Bd6 17. Re2 Ne4 18. Be3 O-O 19. Rc1 Bc5 20. Bxc5 Nxc5 21. Ne5 Rd4 22. b3 Rfd8 23. f3 Nd3 24. Nxd3 Bxd3 25. Rd2 b5 26. c5 Kf8 27. Kf2 Ke7 28. Ke3 e5 29. Rcd1 Bf5 30. Rxd4 exd4+ 31. Rxd4 Rxd4 32. Kxd4 Kd7 33. b4 Kc6 34. g4 Be6 35. h3 Bxa2 36. f4 Bb1 37. f5 Bc2 38. h4 Bb3 39. g5 f6 40. g6 hxg6 41. fxg6 Bd5 42. Ke3 a5 43. bxa5 Kxc5 44. h5 b4 45. h6 gxh6 46. a6 b3 47. a7 Kb4 48. g7 b2 49. a8=Q Bxa8 50. g8=Q Kc3 51. Qc8+ Kb3 { Black wins on time. } 0-1';
 // Parse the PGN string and get the array of moves
 const moves = parsePGN(pgn, parseBoard);
 

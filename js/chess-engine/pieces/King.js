@@ -13,9 +13,11 @@ class King extends Piece {
 
   // Return an array of valid positions that the king can move to
   // (+1,+1), (+1,-1), (+1,0), (0,0), (-1,+1), (-1,-1), (-1,0), (-1,-1)
+
+  // Need to modify this, like the other piece js classes, 
+  // to handle when squares are occupied by enemy/friendly pieces.
   getValidMoves(board) {
     let moves = [];
-
     moves.push([this.position[0]+1, this.position[1]+1]);
     moves.push([this.position[0]+1, this.position[1]-1]);
     moves.push([this.position[0]+1, this.position[1]+0]);
@@ -25,10 +27,6 @@ class King extends Piece {
     moves.push([this.position[0]-1, this.position[1]-0]);
     moves.push([this.position[0]-1, this.position[1]-1]);
     return moves;
-  }
-
-  isAttacking(piece) {
-    // Return true if the king is attacking the specified piece, false otherwise
   }
 }
 

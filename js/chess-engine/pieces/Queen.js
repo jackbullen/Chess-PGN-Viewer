@@ -15,9 +15,6 @@ class Queen extends Piece {
     // Return an array of valid positions that the queen can move to
   }
 
-  isAttacking(piece) {
-    // Return true if the queen is attacking the specified piece, false otherwise
-  }
 }
 
 export { Queen };

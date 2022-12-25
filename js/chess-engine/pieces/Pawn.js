@@ -51,9 +51,6 @@ class Pawn extends Piece {
     }
   }
 
-  isAttacking(piece) {
-    // Return true if the pawn is attacking the specified piece, false otherwise
-  }
 }
 
 export { Pawn };

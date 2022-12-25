@@ -135,13 +135,7 @@ class Bishop extends Piece {
         }
       }
     }
-    // console.log(board.movenum,moves);
     return moves;
-  }
-
-
-  isAttacking(piece) {
-    // Return true if the bishop is attacking the specified piece, false otherwise
   }
 }
 
