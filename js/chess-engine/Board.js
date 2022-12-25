@@ -21,6 +21,7 @@ class StringBuilder {
 class Board {
     constructor() {
         this.board = this.createBoard();
+        this.undoMove = this.createBoard();
         this.whitePieces = [];
         this.blackPieces = [];
         this.initializePieces();
@@ -39,9 +40,9 @@ class Board {
 
   createBoard() {
     // Create and return a 2D array representing the chess board
-    let board = [];
+    const board = [];
     for (let i = 0; i < 8; i++) {
-        let row = [];
+        const row = [];
         for (let j = 0; j < 8; j++) {
           row.push('e');
         }
@@ -49,9 +50,8 @@ class Board {
     }
     return board;
   }
-
+// Add the initial set of chess pieces to the piece arrays, then to the board.
   initializePieces() {
-    // Add the initial set of chess pieces to the board
     // Add white pieces
     this.whitePieces.push(new Rook('white', [0, 0]));
     this.whitePieces.push(new Knight('white', [0, 1]));
@@ -61,41 +61,38 @@ class Board {
     this.whitePieces.push(new Bishop('white', [0, 5]));
     this.whitePieces.push(new Knight('white', [0, 6]));
     this.whitePieces.push(new Rook('white', [0, 7]));
-
     for (let i = 0; i < 8; i++) {
     this.whitePieces.push(new Pawn('white', [1, i]));
     }
-
     // Add black pieces
     this.blackPieces.push(new Rook('black', [7, 0])); 
     this.blackPieces.push(new Knight('black', [7, 1]));
-    this.blackPieces.push(new Bishop('black', [7, 5]));
+    this.blackPieces.push(new Bishop('black', [7, 2]));
     this.blackPieces.push(new King('black', [7, 3]));
     this.blackPieces.push(new Queen('black', [7, 4]));
-    this.blackPieces.push(new Bishop('black', [7, 2]));
+    this.blackPieces.push(new Bishop('black', [7, 5]));
     this.blackPieces.push(new Knight('black', [7, 6]));   
     this.blackPieces.push(new Rook('black', [7, 7]));
-
-
     for (let i = 0; i < 8; i++) {
     this.blackPieces.push(new Pawn('black', [6, i]));
     }
 
     // Add the pieces to the board
     for (let i = 0; i < this.whitePieces.length; i++) {
-    let piece = this.whitePieces[i];
+    const piece = this.whitePieces[i];
     let x = piece.position[0];
     let y = piece.position[1];
     this.board[x][y] = piece;
     }
-
     for (let i = 0; i < this.blackPieces.length; i++) {
-    let piece = this.blackPieces[i];
+    const piece = this.blackPieces[i];
     let x = piece.position[0];
     let y = piece.position[1];
     this.board[x][y] = piece;
     }
   }
+
+  // Castle move logic
   castle(king, rook, short) {
 
     this.movenum+=1/2;
@@ -120,6 +117,8 @@ class Board {
       king.position = [tmp[0], tmp[1]-2];
     }
   }
+
+  // Move logic
   move(src, dest, piece) {
 
     this.movenum+=1/2;
@@ -138,17 +137,69 @@ class Board {
     
     // Perform the moves
     this.board[endX][endY] = piece;
-    this.board[srcX][srcY] = "e";
+    this.board[src[0]][src[1]] = "e";
+    
     piece.position = [endX, endY];
   }
 
+  forwardMove(move) {
+
+    if (this.movenum == Math.floor(this.movenum)) {
+      // White castles
+      if (move[3] == "King and Rook") {
+          let king = this.whitePieces[3];
+          // Short
+          // console.log(submovesList[0],submovesList[1]);
+          if (move[2] == "O-O"){
+              let rook = this.whitePieces[0];
+              this.castle(king, rook, true);
+          }
+          // Long
+          else {
+              let rook = this.whitePieces[7];
+              this.castle(king, rook, false);
+          }
+      }
+      // Non-castle white move
+      else {
+          let pieceW = this.whitePieces[move[4]];
+          let srcSqrW = pieceW.position;
+          this.move(srcSqrW, move.slice(0,2), pieceW);
+      }
+  }
+  else{
+      // Black castles
+      if (move[3] == "King and Rook") {
+          let king = this.blackPieces[3];
+          // Short
+          
+          if (move[2] == "O-O"){
+              let rook = this.blackPieces[0];
+              // console.log(king.position,rook.position);
+              this.castle(king, rook, true);
+          }
+          // Long
+          else {
+              let rook = this.blackPieces[7];
+              this.castle(king, rook, false);
+          }
+      }
+      // Non-castle black move
+      else {
+          const pieceB = this.blackPieces[move[4]];
+          const srcSqrB = pieceB.position;
+          this.move(srcSqrB, move.slice(0,2), pieceB);
+      }
+  }
+  }
+  // Check if a square is occupied by a piece, return true if so.
   occupied(sqr){
     if (this.board[sqr] == "e") return false;
     else return true;
   }
 
+  // Return true if the specified color is in checkmate, false otherwise
   checkmate(color) {
-    // Return true if the specified color is in checkmate, false otherwise
     let inCheck = this.inCheck(color);
     if (!inCheck) {
         return false;
@@ -177,12 +228,10 @@ class Board {
         }
     return true;
       }
-      
-
   }
 
+  // Return true if the specified color is in stalemate, false otherwise
   stalemate(color) {
-    // Return true if the specified color is in stalemate, false otherwise
     if (this.inCheck(color)) {
         return false;
       }
@@ -211,6 +260,33 @@ class Board {
       }
       return true;
   }
+
+  // // Update board function. 
+  // // Only used after another board has parsed the PGN.
+  // update(W, B, undo=false) {
+  //   // let pieceW = this.whitePieces[W[4]];
+  //   // let pieceB = this.blackPieces[B[4]];
+
+  //   // Backward move
+  //   if (undo) {
+  //     if (this.movenum == 0) {
+  //       return;
+  //     }
+
+  //     // Make reverse move here with this.undo= [W,B] of previous move.
+      
+  //   } 
+  //   // Forward move
+  //   else {
+  //     if 
+  //     this.board[W[0]][W[1]] = this.whitePieces[W[4]];
+
+  //     this.undo = [W,B];
+  //   }
+
+
+  // }
 }
+
 
 export { Board };
