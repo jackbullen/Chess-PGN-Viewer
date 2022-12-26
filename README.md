@@ -14,3 +14,6 @@ A Chess PGN Viewer built with JavaScript, HTML, and CSS. The Chess PGN Viewer im
  PGN reading | 0.5 | Some errors with ambiguous piece moves. Not handling promotion of pieces or en passant.
  Click-to-move | 0 | 
  PGN writing | 0 | 
+
+## Picture:
+<img width="1032" alt="screenshot" src="https://user-images.githubusercontent.com/37254717/209571443-9f8e8e3a-76b1-4a2f-a585-25ac7e9892ae.png">
