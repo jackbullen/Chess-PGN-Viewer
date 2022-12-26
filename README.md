@@ -1,5 +1,5 @@
 # Chess-PGN-Viewer
-A chess PGN Viewer built with JavaScript, HTML, and CSS.
+A Chess PGN Viewer built with JavaScript, HTML, and CSS. The Chess PGN Viewer implements a class for the Board and each of the Pieces. These classes are used to parse the PGN and render updates on the board in board.js file.
 
 *Promoting pawn moves and the backwards move control button have not yet been implemented.*
 
