@@ -212,7 +212,9 @@ const renderBoard = (board) => {
         // Handle moves with a result,
         // (e.g. "1-0", "0-1", "1/2-1/2", "1.", "2.")
         if (move == "1-0" || move == "0-1" || move == "1/2-1/2") {
-            movesList.push(move);
+            applyMoves(board,submovesList,movesList);
+            movesList.push(submovesList);
+            // movesList.push(move);
             break;
         }
 
@@ -324,6 +326,7 @@ const renderBoard = (board) => {
         
         submovesList.push([dest_row,dest_col,move+check,peace]);
         turn = !turn;
+
     }
     return movesList;
   }
@@ -462,12 +465,13 @@ const renderBoard = (board) => {
       // Check if there are more moves to play
       if (currentMove < moves.length) {
         console.log(game[currentMove]);
-        if (game[currentMove] == "1-0" || game[currentMove] == "0-1" ||game[currentMove] == "1/2-1/2" ){
+        if (moves[currentMove] == "1-0" || moves[currentMove] == "0-1" || moves[currentMove] == "1/2-1/2" ){
             // showendBoard(board);
             console.log("end of game");
             return;
         }
         // Update the board with the next move
+        // console.log(currentMove,moves[currentMove]);
         board.forwardMove(moves[currentMove]);
         
         // Update the board display with the updated board
@@ -510,6 +514,7 @@ updateButton.addEventListener('click', () => {
     const parseBoard = new Board();
   // Use pgn to update the chess game
     moves = parsePGN(pgn, parseBoard).flat();
+    console.log(moves);
 //   playGame(pgn, gameBoard, moves.flat());
 
 });
@@ -519,8 +524,8 @@ updateButton.addEventListener('click', () => {
     forwardButton.addEventListener('click', () => {
         // Check if there are more moves to play
         if (currentMove < moves.length) {
-          console.log(pgn[currentMove]);
-          if (pgn[currentMove] == "1-0" || pgn[currentMove] == "0-1" || pgn[currentMove] == "1/2-1/2" ){
+          console.log(moves[currentMove]);
+          if (moves[currentMove] == "1-0" || moves[currentMove] == "0-1" || moves[currentMove] == "1/2-1/2" ){
               // showendBoard(board);
               console.log("end of game");
               return;
