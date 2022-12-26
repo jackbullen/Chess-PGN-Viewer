@@ -1,5 +1,5 @@
 # Chess-Opening-Trainer
-A chess opening trainer that gathers you most used opening from Lichess. Written with JavaScript, CSS, and HTML
+A chess opening trainer built with JavaScript, HTML, and CSS.
 
 ### Features:
  Description | Status | Current errors
