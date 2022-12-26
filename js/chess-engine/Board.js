@@ -92,6 +92,13 @@ class Board {
     }
   }
 
+  reset() {
+    this.board = this.createBoard();
+    this.whitePieces = [];
+    this.blackPieces = [];
+    this.initializePieces();
+  }
+
   // Castle move logic
   castle(king, rook, short) {
 
@@ -143,7 +150,7 @@ class Board {
   }
 
   forwardMove(move) {
-
+console.log(move);
       if (this.movenum == Math.floor(this.movenum)) {
         // White castles
         if (move[3] == "King and Rook") {

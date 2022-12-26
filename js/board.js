@@ -7,7 +7,7 @@ const chessBoard = [];
 
 const applyMoves = (board, submovesList, movesList) => {
     
-    
+    console.log(submovesList[0], submovesList[1]);
     // White castles
     if (submovesList[0][3] == "King and Rook") {
         let king = board.whitePieces[3];
@@ -98,17 +98,17 @@ const renderBoard = (board) => {
         // Append the img element to the square
         piece.appendChild(pieceImg);
         square.appendChild(piece);
-        square.appendChild(sqrLoc);
+        // square.appendChild(sqrLoc);
         row.appendChild(square);
         chessBoard.push(square);
       }
       chessBoardDiv.appendChild(row);
       
     }
-    const space = document.createElement('p')
-    const boardtxt = document.createTextNode(`${board.movenum}`);
-    space.appendChild(boardtxt);
-    chessBoardDiv.appendChild(space);
+    // const space = document.createElement('p')
+    // const boardtxt = document.createTextNode(`${board.movenum}`);
+    // space.appendChild(boardtxt);
+    // chessBoardDiv.appendChild(space);
   };
   
 
@@ -199,6 +199,16 @@ const renderBoard = (board) => {
     // handle the various cases for PGN notation
     for (let move of moves) {
 
+             // Handle PGN comments (e.g. "{Scandinavian Defense}")
+             if (move == "}") {
+                comment = false;
+                continue;
+            }
+            if (move == "{" || comment == true) {
+                comment = true;
+                continue;
+            }
+
         // Handle moves with a result,
         // (e.g. "1-0", "0-1", "1/2-1/2", "1.", "2.")
         if (move == "1-0" || move == "0-1" || move == "1/2-1/2") {
@@ -221,16 +231,6 @@ const renderBoard = (board) => {
 
             applyMoves(board,submovesList,movesList);
             // renderBoard(board);
-            continue;
-        }
-
-        // Handle PGN comments (e.g. "{Scandinavian Defense}")
-        if (move == "}") {
-            comment = false;
-            continue;
-        }
-        if (move == "{" || comment == true) {
-            comment = true;
             continue;
         }
 
@@ -452,11 +452,11 @@ const renderBoard = (board) => {
 
   const playGame = (game, board, moves) => {
     // Render the initial board
-    renderBoard(board);
+    // renderBoard(board);
 
     // Get the forward arrow button
     const forwardButton = document.querySelector('#forward-button');
-  
+
     // Add an event listener to the button that plays the next move
     forwardButton.addEventListener('click', () => {
       // Check if there are more moves to play
@@ -495,18 +495,74 @@ const renderBoard = (board) => {
     });
   };
   
-  
+let gameBoard = new Board();
+renderBoard(gameBoard);
+
+let pgn = ""
+let moves = [];
+const pgnInput = document.getElementById('pgn-input');
+const updateButton = document.getElementById('update-button');
+updateButton.addEventListener('click', () => {
+    currentMove = 0;
+    gameBoard = new Board();
+    updateBoard(gameBoard);
+    pgn = pgnInput.value;
+    const parseBoard = new Board();
+  // Use pgn to update the chess game
+    moves = parsePGN(pgn, parseBoard).flat();
+//   playGame(pgn, gameBoard, moves.flat());
+
+});
+    // Get the forward arrow button
+    const forwardButton = document.querySelector('#forward-button');
+    // Add an event listener to the button that plays the next move
+    forwardButton.addEventListener('click', () => {
+        // Check if there are more moves to play
+        if (currentMove < moves.length) {
+          console.log(pgn[currentMove]);
+          if (pgn[currentMove] == "1-0" || pgn[currentMove] == "0-1" || pgn[currentMove] == "1/2-1/2" ){
+              // showendBoard(board);
+              console.log("end of game");
+              return;
+          }
+          // Update the board with the next move
+          gameBoard.forwardMove(moves[currentMove]);
+          
+          // Update the board display with the updated board
+          updateBoard(gameBoard);
+          
+          // Increment the current move counter
+          currentMove++;
+        }
+      });
+    
+      // Get the backward arrow button
+      const backwardButton = document.querySelector('#backward-button');
+    
+      // Add an event listener to the button that plays the previous move
+      backwardButton.addEventListener('click', () => {
+        // Check if there are more moves to play in reverse
+        if (currentMove > 0) {
+          // Decrement the current move counter
+          currentMove--;
+          // Update the board with the previous move
+          gameBoard.update(moves[currentMove][0], moves[currentMove][1], true);
+          // Update the board display with the updated board
+          updateBoard(gameBoard);
+        }
+      });
+
 
 
 // Initialize the moves array using a parsing board and parsePGN().
-const parseBoard = new Board();
-const pgn = '1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 { B01 Scandinavian Defense: Classical Variation } 6. Bc4 e6 7. O-O c6 8. Re1 Nbd7 9. d5 cxd5 10. Nxd5 Nxd5 11. Bxd5 Rd8 12. Bg5 Nf6 13. Qe2 Rxd5 14. c4 Rd7 15. Qe5 Qxe5 16. Rxe5 Bd6 17. Re2 Ne4 18. Be3 O-O 19. Rc1 Bc5 20. Bxc5 Nxc5 21. Ne5 Rd4 22. b3 Rfd8 23. f3 Nd3 24. Nxd3 Bxd3 25. Rd2 b5 26. c5 Kf8 27. Kf2 Ke7 28. Ke3 e5 29. Rcd1 Bf5 30. Rxd4 exd4+ 31. Rxd4 Rxd4 32. Kxd4 Kd7 33. b4 Kc6 34. g4 Be6 35. h3 Bxa2 36. f4 Bb1 37. f5 Bc2 38. h4 Bb3 39. g5 f6 40. g6 hxg6 41. fxg6 Bd5 42. Ke3 a5 43. bxa5 Kxc5 44. h5 b4 45. h6 gxh6 46. a6 b3 47. a7 Kb4 48. g7 b2 49. a8=Q Bxa8 50. g8=Q Kc3 51. Qc8+ Kb3 { Black wins on time. } 0-1';
+// const parseBoard = new Board();
+// const pgn = '1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 { B01 Scandinavian Defense: Classical Variation } 6. Bc4 e6 7. O-O c6 8. Re1 Nbd7 9. d5 cxd5 10. Nxd5 Nxd5 11. Bxd5 Rd8 12. Bg5 Nf6 13. Qe2 Rxd5 14. c4 Rd7 15. Qe5 Qxe5 16. Rxe5 Bd6 17. Re2 Ne4 18. Be3 O-O 19. Rc1 Bc5 20. Bxc5 Nxc5 21. Ne5 Rd4 22. b3 Rfd8 23. f3 Nd3 24. Nxd3 Bxd3 25. Rd2 b5 26. c5 Kf8 27. Kf2 Ke7 28. Ke3 e5 29. Rcd1 Bf5 30. Rxd4 exd4+ 31. Rxd4 Rxd4 32. Kxd4 Kd7 33. b4 Kc6 34. g4 Be6 35. h3 Bxa2 36. f4 Bb1 37. f5 Bc2 38. h4 Bb3 39. g5 f6 40. g6 hxg6 41. fxg6 Bd5 42. Ke3 a5 43. bxa5 Kxc5 44. h5 b4 45. h6 gxh6 46. a6 b3 47. a7 Kb4 48. g7 b2 49. a8=Q Bxa8 50. g8=Q Kc3 51. Qc8+ Kb3 { Black wins on time. } 0-1';
 // Parse the PGN string and get the array of moves
-const moves = parsePGN(pgn, parseBoard);
+// const moves = parsePGN(pgn, parseBoard);
 
-const gameBoard = new Board();
 
-playGame(pgn, gameBoard, moves.flat());
+
+// playGame(pgn, gameBoard, moves.flat());
 
   
   
