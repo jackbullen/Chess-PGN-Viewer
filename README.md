@@ -1,5 +1,5 @@
-# Chess-Opening-Trainer
-A chess opening trainer built with JavaScript, HTML, and CSS.
+# Chess-PGN-Viewer
+A chess PGN Viewer built with JavaScript, HTML, and CSS.
 
 ### Features:
  Description | Status | Current errors
