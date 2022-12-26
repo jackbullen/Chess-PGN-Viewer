@@ -1,7 +1,7 @@
 # Chess-PGN-Viewer
 A chess PGN Viewer built with JavaScript, HTML, and CSS.
 
-Promotion in PGN is currently not being handled. 
+*Promotion in PGN is currently not being handled.*
 
 ### Features:
  Description | Status | Current errors
