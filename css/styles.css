@@ -138,6 +138,7 @@
   font-size: 16px;
   cursor: pointer;
   margin:auto;
+  margin-top: 5px;
   align-items: center;
 }
 
@@ -157,7 +158,77 @@
   align-items: right;
   padding: 25px;
 }
-
+#pgnn {
+  display: flex;
+  flex-direction: column;
+}
 button {
   flex: 1; /* make the form elements take up equal amounts of space */
+}
+#search-form {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+#search-bar {
+  width: 80%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px 20px;
+  outline: none;
+}
+
+#search-form input[type="submit"] {
+  width: 40%;
+  margin-left: 5px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s;
+}
+
+#search-form input[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+#search-results {
+  width: 50%;
+  margin: 20px auto;
+  font-size: 18px;
+}
+
+#search-results {
+  position: fixed;
+  top: 60px; /* adjust this value to position the box appropriately */
+  right: 0;
+  width: 300px; /* adjust this value to set the width of the box */
+  max-height: calc(100vh - 60px); /* adjust this value to set the maximum height of the box */
+  overflow-y: auto; /* add a scrollbar if the list is too long */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+#search-results li {
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px;
+}
+
+#search-results li:hover {
+  background-color: #eee;
 }

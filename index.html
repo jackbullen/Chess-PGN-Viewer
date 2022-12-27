@@ -12,8 +12,9 @@
   <body>
 
     <div id="app">
-      <div id="game_view" style="height: 472px;">
+      <div id="game_view" style="height: auto;">
         <div class="inputPGNBoardView">
+          
           <div id="boardControls">
             <div id="board">
               <!-- <div id="chessBoardDiv"></div> -->
@@ -24,19 +25,27 @@
               <button id="forward-button">&gt;</button>
             </div>
           </div>
+          <div id="pgnn">
           <!-- <label for="pgn-input">Enter PGN:</label> -->
           <div class="Inputter">
-            
-          <textarea type="text" id="pgn-input" ></textarea>
-          
-          <button id="update-button">Load PGN</button>
+            <textarea type="text" id="pgn-input" ></textarea>
+            <button id="update-button">Load PGN</button>
+          </div>
+          <form id="search-form">
+            <input type="text" id="search-bar">
+            <input type="submit" value="Search">
+          </form>
+          <div id="search-results"></div>
         </div>
 
+        </div>
       </div>
     </div>
+
   </body>
 
     <script type="module" src="./js/board.js"></script>
+    <script type="module" src="./js/search.js"></script>
     
 
 </html>

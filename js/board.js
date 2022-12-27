@@ -570,4 +570,3 @@ updateButton.addEventListener('click', () => {
 // playGame(pgn, gameBoard, moves.flat());
 
   
-  

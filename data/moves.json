@@ -1,0 +1,10 @@
+{
+    "pgn": [
+      "1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. Nf3 {This move develops a piece and prepares to castle.}",
+      "1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. Be2 {This move develops a piece and helps to control the center of the board.}",
+      "1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. g3 {This move develops a knight and supports the pawn on e4.}",
+      "1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. Bg5 {This move attacks Black's pawn on d6 and prepares to castle.}",
+      "1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. d5 {This move tries to gain space in the center of the board and put pressure on Black's pawn on d6.}",
+      "1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. Qe2 {This move develops a piece and prepares to castle, while also supporting the pawn on e4.}"
+    ]
+  }
