@@ -29,3 +29,6 @@ https://github.com/lichess-org/chess-openings
 
 Code assistance from
 https://openai.com/
+
+Graphics from
+https://commons.wikimedia.org
