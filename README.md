@@ -18,3 +18,6 @@ A Chess PGN Viewer built with JavaScript, HTML, and CSS. The Chess PGN Viewer im
 
 ## Picture:
 <img width="1032" alt="screenshot" src="https://user-images.githubusercontent.com/37254717/209571443-9f8e8e3a-76b1-4a2f-a585-25ac7e9892ae.png">
+
+Data from
+https://github.com/lichess-org/chess-openings
