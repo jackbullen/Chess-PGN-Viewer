@@ -12,6 +12,7 @@ A Chess PGN Viewer built with JavaScript, HTML, and CSS. The Chess PGN Viewer im
  --- | --- | --- |
  Chess board, moves, and controls view | 0.5 | Highlight current move. Backward move control not implemented. 
  PGN reading | 0.5 | Some errors with ambiguous piece moves. Not handling promotion of pieces or en passant.
+ Responsive to screensize | 0 | For small screen sizes the board currently goes out of view and the grey appview backdrop does not rescale to fit the board.
  Click-to-move | 0 | 
  PGN writing | 0 | 
 
