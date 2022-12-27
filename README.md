@@ -1,7 +1,8 @@
 # Chess-PGN-Viewer
 A Chess PGN Viewer built with JavaScript, HTML, and CSS. The Chess PGN Viewer implements a class for the Board and each of the Pieces. These classes are used to parse the PGN and render updates on the board in board.js file.
 
-*Promoting pawn moves and the backwards move control button have not yet been implemented.*
+*Promoting pawn moves, en passant and the backwards move control button have not yet been implemented.*
+*Todo: Modify the move logic so getValidMoves() is check to determine the moving piece, for every move. Error showcased in this line 1. d4 d5 2. e4 dxe4 3. Nc3 Nf6 4. f3 exf3*
 
 ## Sample PGN: 
 
