@@ -26,3 +26,6 @@ If one of the autocompleted PGNs does not play out until the end of the notation
 
 Data from
 https://github.com/lichess-org/chess-openings
+
+Code assistance from
+https://openai.com/
